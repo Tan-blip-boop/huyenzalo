@@ -1,0 +1,9 @@
+target/
+.vercel
+*.class
+*.log
+*.jar
+*.war
+*.ear
+.DS_Store
+Thumbs.db

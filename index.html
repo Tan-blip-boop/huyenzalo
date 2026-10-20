@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f4">
+    <title>HuyenZALO — Ôn từ vựng tiếng Anh</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #202a25;
+            --muted: #778078;
+            --paper: #f6f7f4;
+            --white: #fff;
+            --line: #e8ebe5;
+            --green: #286849;
+            --green-dark: #1e5138;
+            --mint: #e6f1e9;
+            --orange: #f2a65a;
+            --shadow: 0 12px 36px rgba(30, 54, 40, .07);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--paper);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        button, input, select { font: inherit; }
+        button { cursor: pointer; }
+        .app-shell { min-height: 100vh; }
+        .topbar {
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5.2%;
+            background: rgba(255, 255, 255, .88);
+            border-bottom: 1px solid var(--line);
+        }
+        .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.6px; font-size: 20px; }
+        .brand-mark {
+            display: grid; place-items: center; width: 37px; height: 37px;
+            border-radius: 12px; background: var(--green); color: #fff; font-size: 18px;
+        }
+        .brand span:last-child { color: var(--green); }
+        .top-right { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 13px; }
+        .streak { display: flex; gap: 7px; align-items: center; color: #9d6220; font-weight: 700; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #e8eee6; color: var(--green); font-weight: 800; }
+        .layout { display: grid; grid-template-columns: 235px minmax(0, 1fr); max-width: 1440px; margin: 0 auto; padding: 32px 5.2% 60px; gap: 36px; }
+        aside { padding-top: 10px; }
+        .side-label { margin: 0 0 12px 12px; color: #9aa199; text-transform: uppercase; letter-spacing: 1.2px; font-size: 10px; font-weight: 800; }
+        .nav-list { display: grid; gap: 5px; margin-bottom: 30px; }
+        .nav-button {
+            display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px;
+            text-align: left; border: 0; border-radius: 11px; color: #68736b; background: transparent; font-size: 13px; font-weight: 650;
+        }
+        .nav-button:hover { background: #edf1ec; }
+        .nav-button.active { color: var(--green); background: var(--mint); }
+        .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+        .category-list { display: grid; gap: 2px; }
+        .category-button {
+            display: flex; justify-content: space-between; align-items: center; width: 100%;
+            padding: 9px 12px; border: 0; border-radius: 9px; color: #68736b; background: transparent; text-align: left; font-size: 12px;
+        }
+        .category-button:hover, .category-button.selected { background: #edf1ec; color: var(--green); }
+        .category-count { color: #a0a79f; font-size: 11px; }
+        main { min-width: 0; }
+        .welcome { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin: 2px 0 25px; }
+        .eyebrow { margin: 0 0 8px; color: var(--green); text-transform: uppercase; letter-spacing: 1.5px; font-size: 10px; font-weight: 800; }
+        h1 { margin: 0; font-size: clamp(25px, 3vw, 34px); letter-spacing: -1.2px; line-height: 1.15; }
+        .welcome-subtitle { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+        .date-pill { flex: 0 0 auto; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: white; color: #68736b; font-size: 11px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+        .stat-card { display: flex; justify-content: space-between; align-items: center; padding: 17px 19px; border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
+        .stat-label { color: var(--muted); font-size: 11px; font-weight: 650; }
+        .stat-value { margin-top: 6px; font-size: 23px; line-height: 1; font-weight: 800; letter-spacing: -.7px; }
+        .stat-note { margin-top: 5px; color: #a0a79f; font-size: 10px; }
+        .stat-icon { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 12px; background: #f0f4ef; font-size: 17px; }
+        .panel { padding: 23px; border: 1px solid var(--line); border-radius: 17px; background: var(--white); box-shadow: var(--shadow); }
+        .panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 18px; }
+        .panel-heading h2 { margin: 0; font-size: 16px; letter-spacing: -.3px; }
+        .panel-heading p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+        .select-control, .search-control {
+            min-height: 38px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px;
+            color: #536057; background: white; outline: none; font-size: 11px;
+        }
+        .select-control:focus, .search-control:focus { border-color: #80a990; box-shadow: 0 0 0 3px rgba(40, 104, 73, .1); }
+        .study-toolbar { display: flex; align-items: center; gap: 8px; }
+        .flashcard {
+            position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            width: 100%; min-height: 275px; padding: 35px 22px; overflow: hidden; border: 0; border-radius: 14px;
+            background: #f2f6f1; text-align: center; cursor: pointer;
+        }
+        .flashcard::before, .flashcard::after { content: ""; position: absolute; border: 1px solid rgba(40, 104, 73, .08); border-radius: 50%; }
+        .flashcard::before { width: 270px; height: 270px; top: -190px; right: -65px; }
+        .flashcard::after { width: 210px; height: 210px; bottom: -155px; left: -65px; }
+        .word-type { position: relative; z-index: 1; padding: 5px 9px; border-radius: 999px; background: #e2ede4; color: var(--green); font-size: 10px; font-weight: 750; }
+        .flash-word { position: relative; z-index: 1; margin: 18px 0 9px; font-size: clamp(27px, 4vw, 39px); line-height: 1.2; font-weight: 800; letter-spacing: -1.1px; }
+        .flash-hint { position: relative; z-index: 1; color: #89938b; font-size: 11px; }
+        .flash-translation { position: relative; z-index: 1; margin: 8px 0 0; color: var(--green-dark); font-size: 19px; font-weight: 700; }
+        .flashcard.revealed { background: #edf4ee; }
+        .study-progress { display: flex; justify-content: space-between; margin: 12px 1px 8px; color: #8a938b; font-size: 10px; }
+        .progress-track { height: 5px; overflow: hidden; border-radius: 9px; background: #edf0eb; }
+        .progress-fill { height: 100%; border-radius: inherit; background: var(--green); transition: width .25s ease; }
+        .card-actions { display: flex; justify-content: center; gap: 10px; margin-top: 17px; }
+        .button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 0 17px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: #4f5b52; font-size: 11px; font-weight: 750; transition: transform .15s ease, background .15s ease; }
+        .button:hover { transform: translateY(-1px); background: #f7f9f6; }
+        .button.primary { border-color: var(--green); background: var(--green); color: #fff; }
+        .button.primary:hover { background: var(--green-dark); }
+        .button:disabled { cursor: default; opacity: .55; transform: none; }
+        .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 17px; }
+        .tip-card { display: flex; gap: 12px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+        .tip-emoji { font-size: 19px; }
+        .tip-card strong { display: block; margin-bottom: 4px; font-size: 11px; }
+        .tip-card p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+        .quiz-card { padding: 24px; border-radius: 14px; background: #f4f6f2; }
+        .quiz-meta { display: flex; justify-content: space-between; color: #858e86; font-size: 10px; }
+        .quiz-question { margin: 26px 0 8px; font-size: 25px; letter-spacing: -.7px; }
+        .quiz-instruction { margin: 0 0 18px; color: var(--muted); font-size: 12px; }
+        .answer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .answer-option { min-height: 48px; padding: 11px 14px; border: 1px solid #e2e7df; border-radius: 10px; background: white; color: #3e4a41; text-align: left; font-size: 12px; }
+        .answer-option:hover:not(:disabled) { border-color: #9bb9a3; }
+        .answer-option.correct { border-color: #63a47c; background: #e7f3e9; color: #205d38; }
+        .answer-option.incorrect { border-color: #e1a09a; background: #fbebea; color: #9a4239; }
+        .quiz-feedback { min-height: 19px; margin: 13px 0 0; font-size: 11px; font-weight: 700; }
+        .library-tools { display: flex; gap: 8px; }
+        .search-control { width: 210px; }
+        .word-table-wrap { overflow-x: auto; }
+        .word-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .word-table th { padding: 10px 12px; border-bottom: 1px solid var(--line); color: #9aa199; text-transform: uppercase; letter-spacing: .8px; font-size: 9px; }
+        .word-table td { padding: 12px; border-bottom: 1px solid #f0f1ee; color: #59645b; font-size: 11px; }
+        .word-table tr:last-child td { border-bottom: 0; }
+        .word-table td:first-child { color: var(--ink); font-weight: 700; }
+        .word-category { color: #89938b !important; }
+        .empty-state { padding: 35px; color: var(--muted); text-align: center; font-size: 12px; }
+        .toast { position: fixed; right: 24px; bottom: 24px; padding: 12px 16px; border-radius: 11px; background: #243a2c; color: white; box-shadow: var(--shadow); font-size: 12px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease; }
+        .toast.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 850px) {
+            .topbar { padding: 0 4%; }
+            .layout { grid-template-columns: 190px minmax(0, 1fr); gap: 22px; padding: 26px 4%; }
+            .stat-card { padding: 14px; }
+        }
+        @media (max-width: 650px) {
+            .topbar { height: 64px; }
+            .top-right > span:first-child { display: none; }
+            .layout { display: block; padding-top: 22px; }
+            aside { display: flex; gap: 7px; overflow-x: auto; padding: 0 0 15px; }
+            .side-label, .category-list { display: none; }
+            .nav-list { display: flex; flex: 0 0 auto; gap: 5px; margin: 0; }
+            .nav-button { width: auto; white-space: nowrap; padding: 9px 11px; font-size: 11px; }
+            .nav-icon { width: auto; }
+            .welcome { align-items: flex-start; }
+            .date-pill { display: none; }
+            .stat-grid { gap: 8px; }
+            .stat-card { align-items: flex-start; padding: 12px; }
+            .stat-icon { display: none; }
+            .stat-value { font-size: 19px; }
+            .stat-label { font-size: 10px; }
+            .panel { padding: 16px; }
+            .panel-heading { align-items: flex-start; flex-direction: column; }
+            .study-toolbar { width: 100%; }
+            .select-control { flex: 1; }
+            .flashcard { min-height: 245px; }
+            .bottom-row { grid-template-columns: 1fr; }
+            .answer-list { grid-template-columns: 1fr; }
+            .quiz-question { font-size: 22px; }
+            .search-control { width: min(52vw, 210px); }
+            .library-tools { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <header class="topbar">
+        <div class="brand"><span class="brand-mark">H</span><span>Huyen<span>ZALO</span></span></div>
+        <div class="top-right"><span>Học một chút, tiến bộ mỗi ngày</span><span class="streak">✦ <span id="streak-count">0 ngày học</span></span><span class="avatar" aria-label="Học viên">A</span></div>
+    </header>
+
+    <div class="layout">
+        <aside aria-label="Điều hướng">
+            <p class="side-label">Không gian học tập</p>
+            <nav class="nav-list">
+                <button class="nav-button active" data-view="study"><span class="nav-icon">▣</span>Thẻ ghi nhớ</button>
+                <button class="nav-button" data-view="quiz"><span class="nav-icon">✳</span>Kiểm tra</button>
+                <button class="nav-button" data-view="library"><span class="nav-icon">☷</span>Từ điển</button>
+            </nav>
+            <p class="side-label">Chủ đề từ vựng</p>
+            <div class="category-list" id="category-list"></div>
+        </aside>
+
+        <main>
+            <section class="welcome">
+                <div>
+                    <p class="eyebrow">Góc học tập của bạn</p>
+                    <h1 id="page-title">Học từ vựng thật chủ động.</h1>
+                    <p class="welcome-subtitle" id="page-subtitle">Ôn tập thông minh, ghi nhớ lâu hơn mỗi ngày.</p>
+                </div>
+                <div class="date-pill" id="today-label"></div>
+            </section>
+
+            <section class="stat-grid" aria-label="Thống kê học tập">
+                <article class="stat-card"><div><div class="stat-label">Từ vựng trong bộ học</div><div class="stat-value" id="total-stat">0</div><div class="stat-note">Được tuyển chọn theo chủ đề</div></div><span class="stat-icon">▤</span></article>
+                <article class="stat-card"><div><div class="stat-label">Đã ghi nhớ</div><div class="stat-value" id="mastered-stat">0</div><div class="stat-note" id="mastered-note">Bắt đầu học ngay hôm nay</div></div><span class="stat-icon">✓</span></article>
+                <article class="stat-card"><div><div class="stat-label">Chủ đề</div><div class="stat-value" id="category-stat">0</div><div class="stat-note">Từ giao tiếp đến công việc</div></div><span class="stat-icon">◈</span></article>
+            </section>
+
+            <section class="panel" id="study-view">
+                <div class="panel-heading">
+                    <div><h2>Thẻ ghi nhớ</h2><p>Lật thẻ để xem nghĩa, đánh dấu từ bạn đã nhớ.</p></div>
+                    <div class="study-toolbar">
+                        <select class="select-control" id="study-category" aria-label="Chọn chủ đề"></select>
+                        <button class="button" id="speak-button" title="Nghe phát âm" aria-label="Nghe phát âm">🔊</button>
+                    </div>
+                </div>
+                <button class="flashcard" id="flashcard" aria-label="Lật thẻ từ vựng">
+                    <span class="word-type" id="word-type"></span>
+                    <span class="flash-word" id="flash-word"></span>
+                    <span class="flash-hint" id="flash-hint">Chạm vào thẻ để xem nghĩa tiếng Việt</span>
+                    <span class="flash-translation" id="flash-translation" hidden></span>
+                </button>
+                <div class="study-progress"><span id="card-position"></span><span id="card-mastered"></span></div>
+                <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+                <div class="card-actions">
+                    <button class="button" id="review-button">↻ Ôn lại</button>
+                    <button class="button primary" id="known-button">✓ Tôi đã nhớ</button>
+                    <button class="button" id="next-button">Tiếp theo →</button>
+                </div>
+            </section>
+
+            <section class="panel" id="quiz-view" hidden>
+                <div class="panel-heading"><div><h2>Kiểm tra nhanh</h2><p>Chọn nghĩa tiếng Việt chính xác nhất cho từ tiếng Anh.</p></div><button class="button" id="restart-quiz">↻ Làm bài mới</button></div>
+                <div class="quiz-card">
+                    <div class="quiz-meta"><span id="quiz-progress">Câu 1 / 10</span><span id="quiz-score">Điểm: 0</span></div>
+                    <div class="progress-track" style="margin-top:10px"><div class="progress-fill" id="quiz-progress-fill"></div></div>
+                    <div id="quiz-content"></div>
+                </div>
+            </section>
+
+            <section class="panel" id="library-view" hidden>
+                <div class="panel-heading">
+                    <div><h2>Tra cứu từ vựng</h2><p id="library-count"></p></div>
+                    <div class="library-tools">
+                        <input class="search-control" id="search-input" type="search" placeholder="Tìm từ hoặc nghĩa..." aria-label="Tìm từ vựng">
+                        <select class="select-control" id="library-category" aria-label="Lọc theo chủ đề"></select>
+                    </div>
+                </div>
+                <div class="word-table-wrap"><table class="word-table"><thead><tr><th>Từ / cụm từ</th><th>Nghĩa tiếng Việt</th><th>Chủ đề</th></tr></thead><tbody id="word-list"></tbody></table></div>
+            </section>
+
+            <div class="bottom-row">
+                <article class="tip-card"><span class="tip-emoji">🧠</span><div><strong>Ôn tập ngắt quãng</strong><p>Ôn lại từ mới sau một khoảng nghỉ giúp chuyển kiến thức vào trí nhớ dài hạn.</p></div></article>
+                <article class="tip-card"><span class="tip-emoji">🎧</span><div><strong>Kết hợp nghe và đọc</strong><p>Nhấn biểu tượng loa trên thẻ để luyện phát âm cùng lúc với ghi nhớ từ.</p></div></article>
+            </div>
+        </main>
+    </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+    const categories = [
+        { name: "Giao tiếp & công việc", words: [
+            ["behave", "cư xử", "v"], ["investor", "nhà đầu tư", "n"], ["handle customer complaints", "giải quyết khiếu nại", "cụm từ"], ["technical difficulties", "các sự cố / khó khăn kỹ thuật", "cụm từ"], ["informative", "giàu thông tin", "adj"], ["pleasure", "niềm vui; sự hài lòng", "n"], ["proved highly beneficial", "tỏ ra rất có lợi", "cụm từ"], ["theatergoers", "người đi xem kịch", "n"], ["registered mail", "thư bảo đảm", "cụm từ"], ["standard mail", "thư thường", "cụm từ"], ["as noted / mentioned in", "như đã được ghi chú / đề cập trong", "cụm từ"], ["thoroughly", "tỉ mỉ, kỹ lưỡng", "adv"], ["prior to", "trước khi", "cụm từ"], ["refrigerated truck", "xe tải lạnh", "cụm từ"], ["loading dock", "bến / khu vực bốc dỡ hàng", "cụm từ"], ["anticipate", "dự đoán, lường trước", "v"], ["miniature", "thu nhỏ; mô hình nhỏ", "n / adj"], ["countless", "vô số", "adj"], ["representative", "đại diện", "n"], ["get the message out", "truyền tải thông điệp", "cụm từ"], ["adequate", "đầy đủ, thỏa đáng", "adj"], ["upfront", "thẳng thắn; trả trước", "adj / adv"], ["realistic", "thực tế", "adj"], ["conference", "hội nghị", "n"], ["conference room", "phòng họp", "cụm từ"], ["press conference", "họp báo", "cụm từ"], ["supply closet", "tủ đồ dùng", "cụm từ"], ["office supplies", "đồ dùng văn phòng", "cụm từ"], ["warehouse", "nhà kho", "n"], ["shipping", "sự vận chuyển, gửi hàng", "n"], ["nearby", "gần đây, ở gần", "adv"], ["assistant", "trợ lý", "n"], ["accounting", "kế toán", "n"], ["department", "phòng ban", "n"], ["savings account", "tài khoản tiết kiệm", "cụm từ"], ["personal savings", "tiền tiết kiệm cá nhân", "cụm từ"], ["credit card", "thẻ tín dụng", "cụm từ"], ["analyst", "chuyên viên phân tích", "n"], ["competent", "có năng lực, thạo việc", "adj"], ["retreat", "chuyến nghỉ dưỡng tập thể của công ty", "n"], ["meter", "mét", "n"], ["tracking software", "phần mềm theo dõi", "cụm từ"], ["tracking number", "mã vận đơn", "cụm từ"], ["hardware store", "cửa hàng kim khí", "cụm từ"], ["nail", "cái đinh", "n"], ["hammer", "cái búa", "n"], ["retirement party", "tiệc mừng nghỉ hưu", "cụm từ"], ["thoughtful", "chu đáo", "adj"], ["intern", "thực tập sinh", "n"], ["brochure", "tờ giới thiệu", "n"], ["lobby", "sảnh", "n"], ["expense report", "báo cáo chi phí", "cụm từ"], ["percent off", "giảm theo phần trăm", "cụm từ"], ["percent discount", "mức giảm giá phần trăm", "cụm từ"], ["demonstration", "buổi trình diễn", "n"], ["product demonstration", "buổi giới thiệu sản phẩm", "cụm từ"], ["charge", "sạc (pin)", "v"], ["wireless", "không dây", "adj"], ["wireless network / headphones", "mạng / tai nghe không dây", "cụm từ"], ["cost / be priced at", "có giá", "cụm từ"], ["aisle", "lối đi", "n"], ["database", "cơ sở dữ liệu", "n"], ["update the database", "cập nhật cơ sở dữ liệu", "cụm từ"], ["fit", "vừa; chứa vừa", "v"], ["extra supplies", "đồ dùng dự phòng", "cụm từ"], ["in charge of", "phụ trách", "cụm từ"], ["at the end of the hallway", "ở cuối hành lang", "cụm từ"], ["down the hallway", "dọc hành lang", "cụm từ"], ["blind", "rèm cửa sổ", "n"], ["construction crew", "đội thi công", "cụm từ"], ["construction site", "công trường", "cụm từ"], ["under construction", "đang xây dựng", "cụm từ"], ["stepladder", "thang gấp", "n"], ["available", "có sẵn", "adj"], ["midday", "giữa trưa", "n"], ["midnight", "nửa đêm", "n"], ["take someone to", "đưa ai đó tới", "cụm từ"], ["on the corner of", "ở góc", "cụm từ"], ["around the corner", "ngay gần đây; ở ngay góc phố", "cụm từ"], ["in the corner", "trong góc", "cụm từ"], ["accounting department", "phòng kế toán", "cụm từ"], ["financial projections", "dự báo tài chính", "cụm từ"], ["monitor", "màn hình", "n"], ["projector", "máy chiếu", "n"], ["front entrance", "cửa trước", "cụm từ"], ["meeting minutes", "biên bản cuộc họp", "cụm từ"], ["finance analyst", "chuyên viên phân tích tài chính", "cụm từ"]
+        ]},
+        { name: "Sinh hoạt hằng ngày", words: [
+            ["get dressed", "mặc quần áo", "cụm từ"], ["take a nap", "ngủ trưa", "cụm từ"], ["make a call", "gọi điện", "cụm từ"], ["hang clothes", "phơi quần áo", "cụm từ"], ["take a walk", "đi dạo", "cụm từ"], ["brush hair", "chải tóc", "cụm từ"], ["pack a bag", "chuẩn bị cặp / ba lô", "cụm từ"], ["set the alarm", "đặt báo thức", "cụm từ"], ["fall asleep", "chìm vào giấc ngủ", "cụm từ"], ["wake up late", "ngủ dậy trễ", "cụm từ"], ["check the time", "xem giờ", "cụm từ"], ["go for a run", "đi chạy bộ", "cụm từ"]
+        ]},
+        { name: "Thể thao", words: [
+            ["coach", "huấn luyện viên", "n"], ["referee", "trọng tài", "n"], ["athlete", "vận động viên", "n"], ["field", "sân (bóng đá, bóng chày)", "n"], ["court", "sân (tennis, bóng rổ)", "n"], ["tournament", "giải đấu", "n"], ["medal", "huy chương", "n"], ["tie", "hòa", "v / n"], ["train", "huấn luyện", "v"], ["hit", "đánh, đập", "v"], ["shoot", "sút bóng", "v"], ["pass", "chuyền bóng", "v"], ["referee whistle", "còi trọng tài", "cụm từ"], ["racket", "vợt", "n"], ["bat", "gậy bóng chày", "n"], ["jersey", "áo thi đấu", "n"], ["badminton", "cầu lông", "n"], ["table tennis", "bóng bàn", "n"], ["gymnastics", "thể dục dụng cụ", "n"], ["hiking", "đi bộ đường dài", "n"]
+        ]},
+        { name: "Nghệ thuật & truyền thông", words: [
+            ["sketch", "phác họa", "n"], ["movie", "phim", "n"], ["theater", "rạp hát; sân khấu", "n"], ["play", "vở kịch", "n"], ["script", "kịch bản", "n"], ["director", "đạo diễn", "n"], ["stage", "sân khấu", "n"], ["show", "chương trình", "n"], ["channel", "kênh truyền hình", "n"], ["photo", "bức ảnh", "n"], ["visual", "hình ảnh; yếu tố thị giác", "n"], ["cartoon", "phim hoạt hình", "n"], ["gallery", "phòng trưng bày nghệ thuật", "n"], ["exhibition", "triển lãm", "n"], ["audience rating", "đánh giá của khán giả", "n"], ["review", "nhận xét, đánh giá", "n"]
+        ]},
+        { name: "Động vật & thiên nhiên", words: [
+            ["turtle", "rùa", "n"], ["giraffe", "hươu cao cổ", "n"], ["bull", "bò đực", "n"], ["goat", "dê", "n"], ["goose", "ngỗng", "n"], ["rooster", "gà trống", "n"], ["spider", "nhện", "n"], ["fly", "ruồi", "n"], ["mosquito", "muỗi", "n"], ["crab", "cua", "n"], ["octopus", "bạch tuộc", "n"], ["bat", "dơi", "n"], ["camel", "lạc đà", "n"], ["wolf", "sói", "n"], ["fox", "cáo", "n"], ["deer", "nai, hươu", "n"], ["paw", "chân (động vật)", "n"], ["tail", "đuôi", "n"], ["jungle", "rừng rậm", "n"], ["garbage", "rác (Anh-Mỹ)", "n"], ["plastic", "nhựa", "n"], ["can", "lon", "n"], ["renewable", "có thể tái tạo", "adj"], ["environment-friendly", "thân thiện với môi trường", "adj"], ["rainforest", "rừng mưa nhiệt đới", "n"], ["conservation", "sự bảo tồn", "n"], ["eco-friendly", "thân thiện với môi trường", "adj"], ["animal shelter", "trạm cứu hộ động vật", "n"], ["stray", "đi lạc, lang thang", "adj"], ["leash", "dây xích / dây dắt", "n"], ["seal", "niêm phong", "v"], ["upon arrival", "ngay khi đến nơi", "cụm từ"]
+        ]},
+        { name: "Màu sắc & hình khối", words: [
+            ["light blue", "xanh nhạt", "cụm từ"], ["dark green", "xanh đậm", "cụm từ"], ["navy", "xanh hải quân", "n / adj"], ["beige", "màu be", "n / adj"], ["turquoise", "màu ngọc lam", "n / adj"], ["maroon", "màu nâu đỏ", "n / adj"], ["violet", "màu tím", "n / adj"], ["silver", "màu bạc", "n / adj"], ["gold", "màu vàng ánh kim", "n / adj"], ["bright", "sáng, tươi sáng", "adj"], ["pale", "nhạt", "adj"], ["cube", "khối lập phương", "n"], ["sphere", "khối cầu", "n"], ["cone", "khối nón", "n"], ["cylinder", "hình trụ", "n"], ["curved", "cong", "adj"], ["sharp", "nhọn; sắc", "adj"], ["pointy", "nhọn, có đầu nhọn", "adj"], ["thin", "mỏng", "adj"], ["wide", "rộng", "adj"], ["narrow", "hẹp", "adj"], ["edge", "cạnh", "n"]
+        ]},
+        { name: "Nhà cửa & đồ đạc", words: [
+            ["sheet", "ga trải giường", "n"], ["wardrobe", "tủ quần áo", "n"], ["closet", "tủ (thường âm tường)", "n"], ["drawer", "ngăn kéo", "n"], ["cabinet", "tủ đựng đồ có cánh", "n"], ["stove", "bếp lò", "n"], ["curtain", "rèm cửa", "n"], ["carpet", "thảm trải sàn", "n"], ["apartment", "căn hộ", "n"], ["hall", "hành lang", "n"], ["furniture", "đồ nội thất", "n"], ["mattress", "nệm", "n"]
+        ]},
+        { name: "Cơ thể & sức khỏe", words: [
+            ["tongue", "lưỡi", "n"], ["neck", "cổ", "n"], ["elbow", "khuỷu tay", "n"], ["thumb", "ngón cái", "n"], ["nail", "móng tay", "n"], ["chest", "ngực", "n"], ["waist", "eo", "n"], ["belly", "bụng (thân mật)", "n"], ["hip", "hông", "n"], ["thigh", "đùi", "n"], ["calf", "bắp chân", "n"], ["toe", "ngón chân", "n"], ["bone", "xương", "n"], ["lungs", "phổi", "n"], ["liver", "gan", "n"], ["kidney", "thận", "n"], ["vein", "tĩnh mạch", "n"], ["eyebrow", "lông mày", "n"], ["eyelash", "lông mi", "n"], ["chin", "cằm", "n"], ["forehead", "trán", "n"], ["jaw", "hàm", "n"], ["palm", "lòng bàn tay", "n"], ["heel", "gót chân", "n"], ["spine", "xương sống", "n"]
+        ]}
+    ];
+
+    const allWords = categories.flatMap((category, categoryIndex) =>
+        category.words.map(([word, meaning, type], wordIndex) => ({
+            word, meaning, type, category: category.name, categoryIndex,
+            id: categoryIndex + "-" + wordIndex
+        }))
+    );
+    const storageKey = "huyenzalo-study-state-v1";
+    let savedState = {};
+    try {
+        savedState = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        if (!savedState || typeof savedState !== "object" || Array.isArray(savedState)) savedState = {};
+    } catch (error) {
+        console.error("Không thể đọc tiến độ học đã lưu.", error);
+        savedState = {};
+    }
+    const mastered = new Set(Array.isArray(savedState.mastered) ? savedState.mastered : []);
+    const studyDays = new Set(Array.isArray(savedState.studyDays) ? savedState.studyDays : []);
+    let activeCategory = "all";
+    let cardIndex = 0;
+    let isRevealed = false;
+    let quizQuestions = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+    let toastTimer;
+
+    const $ = (selector) => document.querySelector(selector);
+    const today = new Date();
+    const todayKey = today.toISOString().slice(0, 10);
+    studyDays.add(todayKey);
+
+    function saveState() {
+        try {
+            localStorage.setItem(storageKey, JSON.stringify({
+                mastered: [...mastered],
+                studyDays: [...studyDays]
+            }));
+        } catch (error) {
+            console.error("Không thể lưu tiến độ học.", error);
+            showToast("Không thể lưu tiến độ trên trình duyệt này.");
+        }
+    }
+
+    function selectedWords() {
+        return activeCategory === "all"
+            ? allWords
+            : allWords.filter((item) => item.categoryIndex === Number(activeCategory));
+    }
+
+    function refreshStats() {
+        const words = selectedWords();
+        const masteredInView = words.filter((item) => mastered.has(item.id)).length;
+        $("#total-stat").textContent = words.length;
+        $("#mastered-stat").textContent = masteredInView;
+        $("#mastered-note").textContent = words.length ? `${masteredInView} / ${words.length} từ trong chủ đề hiện tại` : "Chưa có từ vựng";
+        $("#category-stat").textContent = activeCategory === "all" ? categories.length : 1;
+        $("#streak-count").textContent = `${studyDays.size} ngày học`;
+        $("#card-mastered").textContent = `${masteredInView} từ đã nhớ`;
+        $("#progress-fill").style.width = words.length ? `${masteredInView / words.length * 100}%` : "0%";
+    }
+
+    function renderCategories() {
+        const nav = $("#category-list");
+        nav.replaceChildren();
+        categories.forEach((category, index) => {
+            const button = document.createElement("button");
+            button.className = "category-button";
+            button.innerHTML = `<span>${category.name}</span><span class="category-count">${category.words.length}</span>`;
+            button.addEventListener("click", () => setCategory(String(index)));
+            nav.append(button);
+        });
+        ["study-category", "library-category"].forEach((id) => {
+            const select = document.getElementById(id);
+            select.replaceChildren();
+            const allOption = document.createElement("option");
+            allOption.value = "all";
+            allOption.textContent = "Tất cả chủ đề";
+            select.append(allOption);
+            categories.forEach((category, index) => {
+                const option = document.createElement("option");
+                option.value = String(index);
+                option.textContent = category.name;
+                select.append(option);
+            });
+        });
+    }
+
+    function setCategory(value) {
+        activeCategory = value;
+        cardIndex = 0;
+        $("#study-category").value = value;
+        $("#library-category").value = value;
+        $("#category-list").querySelectorAll(".category-button").forEach((button, index) => {
+            button.classList.toggle("selected", value === String(index));
+        });
+        showCard();
+        renderLibrary();
+        refreshStats();
+    }
+
+    function showCard() {
+        const words = selectedWords();
+        if (!words.length) return;
+        cardIndex = ((cardIndex % words.length) + words.length) % words.length;
+        const item = words[cardIndex];
+        isRevealed = false;
+        $("#word-type").textContent = item.type;
+        $("#flash-word").textContent = item.word;
+        $("#flash-translation").textContent = item.meaning;
+        $("#flash-translation").hidden = true;
+        $("#flash-hint").hidden = false;
+        $("#flashcard").classList.remove("revealed");
+        $("#card-position").textContent = `Thẻ ${cardIndex + 1} / ${words.length}`;
+        $("#known-button").textContent = mastered.has(item.id) ? "✓ Đã ghi nhớ" : "✓ Tôi đã nhớ";
+        $("#known-button").disabled = mastered.has(item.id);
+    }
+
+    function flipCard() {
+        isRevealed = !isRevealed;
+        $("#flash-translation").hidden = !isRevealed;
+        $("#flash-hint").hidden = isRevealed;
+        $("#flashcard").classList.toggle("revealed", isRevealed);
+    }
+
+    function moveCard() {
+        cardIndex += 1;
+        showCard();
+    }
+
+    function renderLibrary() {
+        const categoryValue = $("#library-category").value || activeCategory;
+        const query = $("#search-input").value.trim().toLocaleLowerCase("vi");
+        const words = (categoryValue === "all" ? allWords : allWords.filter((item) => item.categoryIndex === Number(categoryValue)))
+            .filter((item) => `${item.word} ${item.meaning} ${item.category}`.toLocaleLowerCase("vi").includes(query));
+        const tbody = $("#word-list");
+        tbody.replaceChildren();
+        words.forEach((item) => {
+            const row = document.createElement("tr");
+            [item.word, item.meaning, item.category].forEach((text, index) => {
+                const cell = document.createElement("td");
+                cell.textContent = text;
+                if (index === 2) cell.className = "word-category";
+                row.append(cell);
+            });
+            tbody.append(row);
+        });
+        $("#library-count").textContent = `Hiển thị ${words.length} / ${allWords.length} từ và cụm từ`;
+        if (!words.length) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+            cell.colSpan = 3;
+            cell.className = "empty-state";
+            cell.textContent = "Không tìm thấy từ phù hợp.";
+            row.append(cell);
+            tbody.append(row);
+        }
+    }
+
+    function showToast(message) {
+        const toast = $("#toast");
+        toast.textContent = message;
+        toast.classList.add("visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("visible"), 2100);
+    }
+
+    function speakWord() {
+        if (!("speechSynthesis" in window)) {
+            showToast("Trình duyệt này chưa hỗ trợ phát âm tự động.");
+            return;
+        }
+        const utterance = new SpeechSynthesisUtterance(selectedWords()[cardIndex].word);
+        utterance.lang = "en-US";
+        utterance.rate = 0.88;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function startQuiz() {
+        const pool = selectedWords();
+        const shuffled = [...pool].sort(() => Math.random() - 0.5);
+        quizQuestions = shuffled; // Kiểm tra tất cả câu hỏi
+        quizIndex = 0;
+        quizScore = 0;
+        quizAnswered = false;
+        renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+        const total = quizQuestions.length;
+        $("#quiz-progress").textContent = total ? `Câu ${Math.min(quizIndex + 1, total)} / ${total}` : "Chưa có câu hỏi";
+        $("#quiz-score").textContent = `Điểm: ${quizScore}`;
+        $("#quiz-progress-fill").style.width = total ? `${quizIndex / total * 100}%` : "0%";
+        const content = $("#quiz-content");
+        content.replaceChildren();
+        if (quizIndex >= total) {
+            const heading = document.createElement("h3");
+            heading.className = "quiz-question";
+            heading.textContent = "Hoàn thành bài kiểm tra!";
+            const result = document.createElement("p");
+            result.className = "quiz-instruction";
+            result.textContent = `Bạn trả lời đúng ${quizScore} / ${total} câu. ${quizScore === total ? "Xuất sắc!" : "Hãy ôn lại những từ chưa chắc nhé."}`;
+            const restart = document.createElement("button");
+            restart.className = "button primary";
+            restart.textContent = "Làm bài mới";
+            restart.addEventListener("click", startQuiz);
+            content.append(heading, result, restart);
+            $("#quiz-progress-fill").style.width = "100%";
+            return;
+        }
+        const item = quizQuestions[quizIndex];
+        const heading = document.createElement("h3");
+        heading.className = "quiz-question";
+        heading.textContent = item.word;
+        const instruction = document.createElement("p");
+        instruction.className = "quiz-instruction";
+        instruction.textContent = `Chọn nghĩa đúng · ${item.type}`;
+        const answers = document.createElement("div");
+        answers.className = "answer-list";
+        const distractors = allWords.filter((candidate) => candidate.id !== item.id)
+            .sort(() => Math.random() - 0.5).slice(0, 3);
+        const choices = [item, ...distractors].sort(() => Math.random() - 0.5);
+        choices.forEach((choice) => {
+            const button = document.createElement("button");
+            button.className = "answer-option";
+            button.textContent = choice.meaning;
+            button.addEventListener("click", () => answerQuiz(button, choice.id === item.id, answers, item));
+            answers.append(button);
+        });
+        const feedback = document.createElement("p");
+        feedback.className = "quiz-feedback";
+        feedback.id = "quiz-feedback";
+        content.append(heading, instruction, answers, feedback);
+    }
+
+    function answerQuiz(button, correct, answers, item) {
+        if (quizAnswered) return;
+        quizAnswered = true;
+        if (correct) {
+            quizScore += 1;
+            mastered.add(item.id);
+            saveState();
+            refreshStats();
+            button.classList.add("correct");
+            $("#quiz-feedback").textContent = "Chính xác! Bạn đã ghi nhớ thêm một từ.";
+            $("#quiz-feedback").style.color = "#286849";
+        } else {
+            button.classList.add("incorrect");
+            answers.querySelectorAll(".answer-option").forEach((option) => {
+                if (option.textContent === item.meaning) option.classList.add("correct");
+            });
+            $("#quiz-feedback").textContent = `Đáp án đúng: ${item.meaning}`;
+            $("#quiz-feedback").style.color = "#a04b42";
+        }
+        answers.querySelectorAll(".answer-option").forEach((option) => { option.disabled = true; });
+        $("#quiz-score").textContent = `Điểm: ${quizScore}`;
+        const next = document.createElement("button");
+        next.className = "button primary";
+        next.style.marginTop = "10px";
+        next.textContent = quizIndex + 1 === quizQuestions.length ? "Xem kết quả →" : "Câu tiếp theo →";
+        next.addEventListener("click", () => {
+            quizIndex += 1;
+            quizAnswered = false;
+            renderQuizQuestion();
+        });
+        $("#quiz-content").append(next);
+    }
+
+    function setView(view) {
+        ["study", "quiz", "library"].forEach((name) => {
+            document.getElementById(`${name}-view`).hidden = name !== view;
+        });
+        document.querySelectorAll(".nav-button").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
+        const titles = {
+            study: ["Học từ vựng thật chủ động.", "Ôn tập thông minh, ghi nhớ lâu hơn mỗi ngày."],
+            quiz: ["Kiểm tra kiến thức của bạn.", "Luyện tập chủ động để nhớ từ vựng lâu hơn."],
+            library: ["Tất cả từ vựng trong tầm tay.", "Tra cứu nhanh theo từ, nghĩa hoặc chủ đề."]
+        };
+        $("#page-title").textContent = titles[view][0];
+        $("#page-subtitle").textContent = titles[view][1];
+        if (view === "quiz") startQuiz();
+    }
+
+    $("#today-label").textContent = new Intl.DateTimeFormat("vi-VN", { weekday: "long", day: "numeric", month: "long" }).format(today);
+    renderCategories();
+    $("#study-category").addEventListener("change", (event) => setCategory(event.target.value));
+    $("#library-category").addEventListener("change", renderLibrary);
+    $("#search-input").addEventListener("input", renderLibrary);
+    $("#flashcard").addEventListener("click", flipCard);
+    $("#speak-button").addEventListener("click", speakWord);
+    $("#next-button").addEventListener("click", moveCard);
+    $("#review-button").addEventListener("click", () => { isRevealed = false; showCard(); });
+    $("#known-button").addEventListener("click", () => {
+        const item = selectedWords()[cardIndex];
+        mastered.add(item.id);
+        saveState();
+        refreshStats();
+        showToast("Đã lưu vào danh sách từ bạn ghi nhớ.");
+        moveCard();
+    });
+    $("#restart-quiz").addEventListener("click", startQuiz);
+    document.querySelectorAll(".nav-button").forEach((button) => button.addEventListener("click", () => setView(button.dataset.view)));
+    $("#study-category").value = "all";
+    $("#library-category").value = "all";
+    refreshStats();
+    showCard();
+    renderLibrary();
+    saveState();
+</script>
+</body>
+</html>
