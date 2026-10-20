@@ -1,0 +1,14 @@
+{
+  "name": "huyenzalo",
+  "version": "1.0.0",
+  "description": "HuyenZALO - Ứng dụng ôn từ vựng tiếng Anh",
+  "scripts": {
+    "start": "npx serve src/main/webapp -p $PORT"
+  },
+  "keywords": ["vocabulary", "english", "learning"],
+  "author": "Tan-blip-boop",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
